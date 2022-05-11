@@ -1,0 +1,292 @@
+document.getElementById("status").style.display = "none";
+
+var suits = ["Spades", "Hearts", "Diamonds", "Clubs"];
+var values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+var deck = new Array();
+var players = new Array();
+var currentPlayer = 0;
+
+function createDeck() {
+    deck = new Array();
+    for (var i = 0; i < values.length; i++) {
+        for (var x = 0; x < suits.length; x++) {
+            var weight = parseInt(values[i]);
+            if (values[i] == "J" || values[i] == "Q" || values[i] == "K")
+                weight = 10;
+            if (values[i] == "A")
+                weight = 11;
+            var card = {
+                Value: values[i],
+                Suit: suits[x],
+                Weight: weight
+            };
+            deck.push(card);
+        }
+    }
+}
+
+function createPlayers(num) {
+    players = new Array();
+    for (var i = 1; i <= num; i++) {
+        var hand = new Array();
+        var player = {
+            Name: 'Player ' + i,
+            ID: i,
+            Points: 0,
+            Hand: hand
+        };
+        players.push(player);
+    }
+}
+
+function createPlayersUI() {
+    document.getElementById('players').innerHTML = '';
+    for (var i = 0; i < players.length; i++) {
+        var div_player = document.createElement('div');
+        var div_playerid = document.createElement('div');
+        var div_hand = document.createElement('div');
+        var div_points = document.createElement('div');
+
+        div_points.className = 'points';
+        div_points.id = 'points_' + i;
+        div_player.id = 'player_' + i;
+        div_player.className = 'player';
+        div_hand.id = 'hand_' + i;
+
+        if (players[i].ID === 2) {
+            div_playerid.innerHTML = "HOUSE";
+        } else {
+            div_playerid.innerHTML = 'ME';
+        }
+
+
+        div_player.appendChild(div_playerid);
+        div_player.appendChild(div_hand);
+        div_player.appendChild(div_points);
+        document.getElementById('players').appendChild(div_player);
+    }
+}
+
+function shuffle() {
+    for (var i = 0; i < 1000; i++) {
+        var location1 = Math.floor((Math.random() * deck.length));
+        var location2 = Math.floor((Math.random() * deck.length));
+        var tmp = deck[location1];
+
+        deck[location1] = deck[location2];
+        deck[location2] = tmp;
+    }
+}
+
+function startblackjack() {
+    document.getElementById('btnStart').value = 'NEW GAME';
+    document.getElementById("status").style.display = "none";
+    document.getElementById('hit').value = 'HIT ME';
+    document.getElementById('stay').value = 'STAY';
+    document.getElementById('hit').disabled = false;
+    document.getElementById('stay').disabled = false;
+    currentPlayer = 0;
+    createDeck();
+    shuffle();
+    createPlayers(2);
+    createPlayersUI();
+    dealHands();
+    document.getElementById('player_' + currentPlayer).classList.add('active');
+}
+
+function dealHands() {
+    for (var i = 0; i < 2; i++) {
+        for (var x = 0; x < players.length; x++) {
+            var card = deck.pop();
+            players[x].Hand.push(card);
+            renderCard(card, x);
+            updatePoints();
+        }
+    }
+
+    updateDeck();
+}
+
+function renderCard(card, player) {
+    var hand = document.getElementById('hand_' + player);
+    hand.appendChild(getCardUI(card));
+}
+
+function getCardUI(card) {
+    var el = document.createElement('div');
+    var icon = '';
+    if (card.Suit == 'Hearts')
+        icon = '&hearts;';
+    else if (card.Suit == 'Spades')
+        icon = '&spades;';
+    else if (card.Suit == 'Diamonds')
+        icon = '&diams;';
+    else
+        icon = '&clubs;';
+
+    el.className = 'card';
+    el.innerHTML = card.Value + '<br/>' + icon;
+    return el;
+}
+
+function getPoints(player) {
+    var points = 0;
+    var aceCount = 0;
+    for (var i = 0; i < players[player].Hand.length; i++) {
+        if (players[player].Hand[i].Weight === 11) {
+            aceCount += 1
+        }
+        points += players[player].Hand[i].Weight;
+
+    }
+
+    for (var x = 0; x < aceCount; x++) {
+        if (points > 21) {
+            points -= 10;
+        }
+    }
+
+
+
+    players[player].Points = points;
+
+    return points;
+}
+
+function updatePoints() {
+    for (var i = 0; i < players.length; i++) {
+        getPoints(i);
+        document.getElementById('points_' + i).innerHTML = players[i].Points;
+    }
+
+}
+
+function hitMe() {
+    var card = deck.pop();
+    players[currentPlayer].Hand.push(card);
+    renderCard(card, currentPlayer);
+    updatePoints();
+    updateDeck();
+    check();
+}
+
+function stay() {
+    if (currentPlayer != players.length - 1) {
+        document.getElementById('player_' + currentPlayer).classList.remove('active');
+        currentPlayer += 1;
+        document.getElementById('player_' + currentPlayer).classList.add('active');
+        simulateAI();
+    } else {
+        end();
+    }
+}
+
+function end() {
+    var winner = -1;
+    var score = 0;
+
+    for (var i = 0; i < players.length; i++) {
+        if (players[i].Points > score && players[i].Points < 22) {
+            winner = i;
+        }
+
+        score = players[i].Points;
+    }
+    if (players[0].Points === players[1].Points) {
+        document.getElementById('status').innerHTML = 'DRAW!';
+    } else {
+        if (winner === 0) {
+            document.getElementById('status').innerHTML = 'YOU WIN!';
+        } else {
+            document.getElementById('status').innerHTML = 'YOU LOSE!';
+        }
+
+    }
+
+    document.getElementById("status").style.display = "block";
+    document.getElementById('btnStart').value = 'NEW GAME';
+    document.getElementById('hit').value = 'Game';
+    document.getElementById('stay').value = 'Over';
+    document.getElementById('btnStart').disabled = false;
+    document.getElementById('hit').disabled = true;
+    document.getElementById('stay').disabled = true;
+}
+
+function check() {
+    if (players[currentPlayer].Points > 21) {
+        document.getElementById('status').innerHTML = 'Player: ' + players[currentPlayer].ID + ' LOST';
+        document.getElementById('status').style.display = "block";
+        end();
+    } else if (currentPlayer != 0) {
+        aiLogic();
+    }
+}
+
+function updateDeck() {
+    document.getElementById('deckcount').innerHTML = deck.length;
+}
+
+function simulateAI() {
+    if (currentPlayer != 0) {
+        document.getElementById('btnStart').value = 'No';
+        document.getElementById('hit').value = 'More';
+        document.getElementById('stay').value = 'Bets';
+        document.getElementById('btnStart').disabled = true;
+        document.getElementById('hit').disabled = true;
+        document.getElementById('stay').disabled = true;
+        aiLogic();
+    }
+}
+
+function aiLogic() {
+    if (players[currentPlayer].Points < 16) {
+        setTimeout(() => {
+            hitMe();
+        }, 1000);
+    } else if (players[currentPlayer].Points < players[0].Points) {
+        setTimeout(() => {
+            hitMe();
+        }, 1000);
+    } else {
+        stay();
+    }
+
+}
+
+function initialize() {
+    document.getElementById('players').innerHTML = '';
+    for (var i = 0; i < players.length; i++) {
+        var div_player = document.createElement('div');
+        var div_playerid = document.createElement('div');
+        var div_hand = document.createElement('div');
+        var div_points = document.createElement('div');
+
+        div_points.className = 'points';
+        div_points.id = 'points_' + i;
+        div_player.id = 'player_' + i;
+        div_player.className = 'player';
+        div_hand.id = 'hand_' + i;
+
+        if (players[i].ID === 2) {
+            div_playerid.innerHTML = "HOUSE";
+        } else {
+            div_playerid.innerHTML = 'ME';
+        }
+
+
+        div_player.appendChild(div_playerid);
+        div_player.appendChild(div_hand);
+        div_player.appendChild(div_points);
+        document.getElementById('players').appendChild(div_player);
+    }
+    document.getElementById('hit').disabled = true;
+    document.getElementById('stay').disabled = true;
+}
+
+window.addEventListener('load', function () {
+    createDeck();
+    shuffle();
+    createPlayers(2);
+    initialize();
+
+});

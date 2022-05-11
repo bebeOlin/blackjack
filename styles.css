@@ -1,0 +1,111 @@
+body {
+    background-color: #8d1616;
+}
+
+header {
+    background-color: black;
+    color: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+section {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.game {
+    border: solid 1px #ddd;
+    margin: 0;
+    background: #096432;
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: dodgerblue;
+}
+
+.game h3 {
+    padding: 10px;
+    background: black;
+    color: white;
+}
+
+.game .game-body {
+    padding: 20px;
+}
+
+.card {
+    min-width: 90px;
+    max-width: 140px;
+    min-height: 130px;
+    max-height: 200px;
+    padding: 10px;
+    border: solid 1px #808080;
+    background-color: white;
+    display: inline-block;
+    border-radius: 10px;
+    font-size: 10pt;
+    text-align: center;
+
+    border: solid 3px;
+}
+
+.card-blank {
+    min-width: 90px;
+    max-width: 140px;
+    min-height: 130px;
+    max-height: 200px;
+    padding: 10px;
+    border: solid 1px #808080;
+    background-color: white;
+    display: inline-block;
+    border-radius: 10px;
+    font-size: 10pt;
+    text-align: center;
+    margin: 3px;
+    border: solid 3px;
+
+}
+
+.player {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 700;
+    width: 100%;
+    border: solid 5px #000000;
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block;
+    background: #096432;
+}
+
+.player.active {
+    border: solid 5px rgb(255, 255, 255);
+}
+
+.points {
+    text-align: center;
+    font-size: 20pt;
+    font-weight: bold;
+    margin: 10px;
+}
+
+footer {
+    font-size: 0.75rem;
+    position: relative;
+    padding: 50px;
+    margin: 0;
+    color: white;
+    font-weight: 300;
+}
+
+#deckcount {
+    color: transparent;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACKJACK</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="text-center">
+        <h3 style="margin: 0; padding: 0;">BLACKJACK</h3>
+    </header>
+    <div id="deckcount" class="deck">52</div>
+    <section class="container-fluid">
+        <div class="row text-center mb-5">
+            <div class="col-md-4 mb-2">
+                <input type="button" id="btnStart" class="btn btn-lg btn-dark" value="NEW GAME"
+                    onclick="startblackjack()">
+            </div>
+            <div class="col-md-4 mb-2 col-xs-6">
+                <input type="button" id="hit" class="btn btn-lg btn-warning" value="HIT ME" onclick="hitMe()">
+            </div>
+            <div class="col-md-4 mb-2 col-xs-6">
+                <input type="button" id="stay" class="btn btn-lg btn-outline-warning" value="STAY" onclick="stay()">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="status text-center alert alert-light" role="alert" id="status"></div>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col">
+                <div id="players" class="players"></div>
+            </div>
+        </div>
+    </section>
+    <footer class="text-center">
+        <div>COPYRIGHT &copy; 2022 BRUCE BOLIN. ALL RIGHTS RESERVED.</div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
+    <script src="index.js"></script>
+</body>
+
+</html>
